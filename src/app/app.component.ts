@@ -1,15 +1,9 @@
 import './app.loader.ts';
-
-import {Component, ViewEncapsulation} from '@angular/core';
-import {RouteConfig} from '@angular/router-deprecated';
-
-import {Pages} from './pages';
-import {AppState} from './app.state';
-import {BaThemeConfigProvider, BaThemeConfig} from './theme';
-import {BaThemeRun} from './theme/directives';
-import {BaImageLoaderService, BaThemePreloader, BaThemeSpinner} from './theme/services';
-
-import {layoutPaths} from './theme/theme.constants';
+import { Component, ViewEncapsulation, ViewContainerRef } from '@angular/core';
+import { GlobalState } from './global.state';
+import { BaImageLoaderService, BaThemePreloader, BaThemeSpinner } from './theme/services';
+import { layoutPaths } from './theme/theme.constants';
+import { BaThemeConfig } from './theme/theme.config';
 
 /*
  * App Component
@@ -17,9 +11,6 @@ import {layoutPaths} from './theme/theme.constants';
  */
 @Component({
   selector: 'app',
-  pipes: [],
-  directives: [BaThemeRun],
-  providers: [BaThemeConfigProvider, BaThemeConfig, BaImageLoaderService, BaThemeSpinner],
   encapsulation: ViewEncapsulation.None,
   styles: [require('normalize.css'), require('./app.scss')],
   template: `
@@ -29,19 +20,16 @@ import {layoutPaths} from './theme/theme.constants';
     </main>
   `
 })
-@RouteConfig([
-  {
-    path: '/pages/...',
-    name: 'Pages',
-    component: Pages,
-    useAsDefault: true
-  },
-])
 export class App {
 
-  isMenuCollapsed:boolean = false;
+  isMenuCollapsed: boolean = false;
 
-  constructor(private _state:AppState, private _imageLoader:BaImageLoaderService, private _spinner:BaThemeSpinner) {
+  constructor(private _state: GlobalState,
+              private _imageLoader: BaImageLoaderService,
+              private _spinner: BaThemeSpinner,
+              private _config: BaThemeConfig,
+              private viewContainerRef: ViewContainerRef) {
+
     this._loadImages();
 
     this._state.subscribe('menu.isCollapsed', (isCollapsed) => {
@@ -49,14 +37,14 @@ export class App {
     });
   }
 
-  public ngAfterViewInit():void {
+  public ngAfterViewInit(): void {
     // hide spinner once all loaders are completed
     BaThemePreloader.load().then((values) => {
       this._spinner.hide();
     });
   }
 
-  private _loadImages():void {
+  private _loadImages(): void {
     // register some loaders
     BaThemePreloader.registerLoader(this._imageLoader.load(layoutPaths.images.root + 'sky-bg.jpg'));
   }

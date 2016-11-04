@@ -1,15 +1,12 @@
 import {Component, ViewEncapsulation} from '@angular/core';
 
-import {BaFullCalendar} from '../../../theme/components';
-import {CalendarService} from "./calendar.service";
+import {CalendarService} from './calendar.service';
 
 @Component({
   selector: 'calendar',
   encapsulation: ViewEncapsulation.None,
   styles: [require('./calendar.scss')],
-  template: require('./calendar.html'),
-  directives: [BaFullCalendar],
-  providers: [CalendarService]
+  template: require('./calendar.html')
 })
 export class Calendar {
 
@@ -28,17 +25,17 @@ export class Calendar {
   private _onSelect(start, end):void {
 
     if (this._calendar != null) {
-      var title = prompt('Event Title:');
-      var eventData;
+      let title = prompt('Event Title:');
+      let eventData;
       if (title) {
         eventData = {
           title: title,
           start: start,
           end: end
         };
-        $(this._calendar).fullCalendar('renderEvent', eventData, true);
+        jQuery(this._calendar).fullCalendar('renderEvent', eventData, true);
       }
-      $(this._calendar).fullCalendar('unselect');
+      jQuery(this._calendar).fullCalendar('unselect');
     }
   }
 }

@@ -6,7 +6,6 @@ import {TrafficChartService} from './trafficChart.service';
 @Component({
   selector: 'traffic-chart',
   encapsulation: ViewEncapsulation.None,
-  providers: [TrafficChartService],
   styles: [require('./trafficChart.scss')],
   template: require('./trafficChart.html')
 })
@@ -25,7 +24,7 @@ export class TrafficChart {
   }
 
   private _loadDoughnutCharts() {
-    let el = $('.chart-area').get(0);
+    let el = jQuery('.chart-area').get(0);
     new Chart(el.getContext('2d')).Doughnut(this.doughnutData, {
       segmentShowStroke: false,
       percentageInnerCutout : 64,

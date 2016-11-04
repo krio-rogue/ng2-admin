@@ -6,7 +6,6 @@ import {TodoService} from './todo.service';
 @Component({
   selector: 'todo',
   encapsulation: ViewEncapsulation.None,
-  providers: [TodoService],
   styles: [require('./todo.scss')],
   template: require('./todo.html')
 })
@@ -33,7 +32,7 @@ export class Todo {
 
   addToDoItem($event) {
 
-    if ($event.which === 1 || $event.which === 13) {
+    if (($event.which === 1 || $event.which === 13) && this.newTodoText.trim() != '') {
 
       this.todoList.unshift({
         text: this.newTodoText,
